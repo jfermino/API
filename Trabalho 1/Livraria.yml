@@ -1,0 +1,182 @@
+swagger: '2.0'
+info:
+  description: Exemplo de uma API de Livro
+  version: 1.0.0
+  title: API de Livro
+  # put the contact info for your development or API team
+  contact:
+    email: juliofermino2009@gmail.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /livros/status:
+    get:
+      tags:
+      - Livros
+      summary: Retorna todos os livros cadastrados de acordo com o status
+      operationId: searchLivrosByStatus
+      description: |
+       Ao passar as opções apropriadas, é retornado todos os livros por status
+      produces:
+      - application/json
+      parameters:
+      - name: status
+        in: query
+        description: Valores de status que precisam ser considerados para o filtro
+        required: true
+        type: array
+        items:
+          type: string
+          enum:
+          - disponiveis
+          - pendentes
+          - vendidos
+          default: available
+        collectionFormat: multi
+      - name: limite
+        in: query
+        description: O maximo de registro que pode ser retornado
+        type: integer
+        maximum: 100
+      responses:
+        200:
+          description: critérios de correspondência de resultados de pesquisa
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/livros'
+        400:
+          description: bad input parameter
+  /livros/{id}:
+    get:
+      tags:
+      - Livros
+      summary: Busca o livro por ID
+      description: Retorna apenas um livro
+      operationId: getLivrotById
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID do livro a ser retornado
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/livros'
+        400:
+          description: ID invalido
+        404:
+          description: Livro não encontrado
+  /livros/categorias/{categoriaId}:
+    get:
+      tags:
+      - Livros
+      summary: Busca o livro por Categoria
+      description: Retorna apenas os livros da categoria informada
+      operationId: getLivrotByCategoryId
+      produces:
+      - application/json
+      parameters:
+      - name: categoriaId
+        in: path
+        description: Id da categoria do livro a ser retornado
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/livros'
+        400:
+          description: ID invalido
+        404:
+          description: Livro ou categoria não encontrado
+  /livros/autores/{autorId}:
+    get:
+      tags:
+      - Livros
+      summary: Busca o livro por autor
+      description: Retorna apenas os livros do autor informada
+      operationId: getLivrotByAutorId
+      produces:
+      - application/json
+      parameters:
+      - name: autorId
+        in: path
+        description: lista todos os livros de acordo com o autor informado
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: successful operation
+          schema:
+            $ref: '#/definitions/livros'
+        400:
+          description: ID invalido
+        404:
+          description: Livro ou autor não encontrado
+definitions:
+  livros:
+    type: object
+    required:
+      - nome
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 17
+      nome:
+        type: string
+        example: A cabana
+      dataLancamento:
+        description: '...'
+        example: 1995-09-07
+        format: date
+        type: string
+      categoria:
+        $ref: '#/definitions/categoria'
+      autores:
+        $ref: '#/definitions/autores'
+  categoria:
+    type: object
+    required:
+    - nome
+    properties:
+      id: 
+        type: integer
+        format: int64
+        example: 10
+      nome:
+        type: string
+        example: Romance
+  autores:
+   type: object
+   required:
+    - nome
+   properties:
+      id: 
+        type: integer
+        format: int64
+        example: 29
+      nome:
+        type: string
+        example: Julio Fermino
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+      
+
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /JulioFermino2/Livraria/1.0.0
+schemes:
+ - https
